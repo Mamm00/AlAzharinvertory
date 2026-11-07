@@ -1,0 +1,38 @@
+name: probe
+# TEMPORARY diagnostic workflow — deleted once the Pages settings are repaired.
+on:
+  push:
+    branches: [arena/9e7effe4-alazharinvertory]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: What can the workflow token change?
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "=== 1. current Pages site ==="
+          gh api "repos/${{ github.repository }}/pages" || true
+
+          echo "=== 2. PUT /pages build_type=workflow ==="
+          gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow || true
+
+          echo "=== 3. Pages site after ==="
+          gh api "repos/${{ github.repository }}/pages" || true
+
+          echo "=== 4. POST deployment branch policy: main ==="
+          gh api -X POST "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" \
+            -f name=main -f type=branch || true
+
+          echo "=== 5. branch policies after ==="
+          gh api "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" || true
+
+          echo "=== 6. environment after ==="
+          gh api "repos/${{ github.repository }}/environments/github-pages" || true
