@@ -307,14 +307,21 @@ ok(/<a id="manual"/.test(html404), 'the 404 needs a no-JS link, since a redirect
 
 /* ---------- 10. the workflow publishes exactly this ---------- */
 ok(/on:\s*\n\s*push:/ .test(wf) || /push:/.test(wf), 'the workflow never triggers on push');
-ok(/actions\/upload-pages-artifact@v3/.test(wf) && /path:\s*site/.test(wf), 'the workflow does not deploy site/');
-ok(/actions\/deploy-pages@v4/.test(wf), 'the workflow never deploys');
-ok(/actions\/configure-pages@v5/.test(wf), 'the workflow skips configure-pages');
+/* The version numbers themselves are deliberately not pinned here: bumping an
+   action is a maintenance task, and a test that hard-codes @v4 turns it into a
+   red build. What must hold is that each step is present and wired correctly. */
+ok(/actions\/upload-pages-artifact@v\d+/.test(wf) && /path:\s*site/.test(wf), 'the workflow does not deploy site/');
+ok(/actions\/deploy-pages@v\d+/.test(wf), 'the workflow never deploys');
+ok(/actions\/configure-pages@v\d+/.test(wf), 'the workflow skips configure-pages');
+ok(/include-hidden-files:\s*true/.test(wf),
+   'the artifact would drop .nojekyll — GitHub Pages would then run Jekyll over the site');
+ok(/build_type/.test(wf),
+   'the deploy job should preflight the Pages source, or a legacy site silently ignores the artifact');
 ok(/build_site\.py --check/.test(wf) && /build_app\.py --check/.test(wf),
    'CI must fail on a stale site/ or app/');
 ['test.js', 'test-ui.js', 'test-site.js', 'lint.js'].forEach((f) =>
   ok(new RegExp('node ' + f.replace('.', '\\.')).test(wf), 'CI never runs ' + f));
-ok(/actions\/setup-node@v4/.test(wf) && /npm ci/.test(wf), 'CI cannot run the suites without jsdom');
+ok(/actions\/setup-node@v\d+/.test(wf) && /npm ci/.test(wf), 'CI cannot run the suites without jsdom');
 ok(/pages: write/.test(wf), 'the workflow lacks the Pages write permission');
 
 if (problems.length) {

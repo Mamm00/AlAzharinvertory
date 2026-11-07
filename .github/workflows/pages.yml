@@ -1,6 +1,19 @@
 # Publishes site/ to GitHub Pages and refuses to ship a stale site.
-# Pages settings: Source = GitHub Actions. Then site/ is whatever these two
-# --check commands say the sources build, so nobody hand-edits the output.
+#
+# Two repository settings have to agree with this file, and both are outside the
+# reach of GITHUB_TOKEN, so they are one-time clicks in the web UI:
+#
+#   1. Settings -> Pages -> Build and deployment -> Source = GitHub Actions
+#      ("Deploy from a branch" pins the site to a single branch, serves that
+#      branch *instead of* any artifact, and rejects this job with
+#      "Deployments are only allowed from <branch>".)
+#   2. Settings -> Environments -> github-pages -> Deployment branches and tags
+#      = the branch named under `on: push:` below, usually `main`
+#      (otherwise Actions is refused before the job starts with
+#      "Branch "main" is not allowed to deploy to github-pages".)
+#
+# The preflight step diagnoses both and prints the exact fix, so a deployment
+# failure names its cause instead of spending an afternoon on the YAML.
 name: pages
 on:
   push:
@@ -20,13 +33,13 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.x'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Install Pillow (brand rasteriser only; the app needs nothing)
         run: python -m pip install --quiet pillow
       - name: Install jsdom (the test harnesses only; the app needs nothing)
@@ -52,14 +65,34 @@ jobs:
       url: ${{ steps.pages.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
+      - uses: actions/checkout@v7
+      - name: Preflight — the Pages source must be GitHub Actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cfg=$(gh api "repos/$GITHUB_REPOSITORY/pages" 2>/dev/null || true)
+          if [ -z "$cfg" ]; then
+            echo "::error::GitHub Pages is not enabled for this repository. Fix: Settings -> Pages -> Build and deployment -> Source = GitHub Actions."
+            exit 1
+          fi
+          build_type=$(printf '%s' "$cfg" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("build_type",""))')
+          echo "Pages build_type: $build_type"
+          if [ "$build_type" != "workflow" ]; then
+            src=$(printf '%s' "$cfg" | python3 -c 'import json,sys; d=json.load(sys.stdin); s=d.get("source") or {}; print(s.get("branch","?")+s.get("path",""))')
+            echo "::error::Pages serves '$build_type' from branch $src, so this artifact would be ignored. Fix: Settings -> Pages -> Build and deployment -> Source = GitHub Actions. One-time click; the site then rebuilds from site/ on every push."
+            exit 1
+          fi
+      - uses: actions/configure-pages@v6
         with:
-          # Create the Pages site on the first run instead of requiring a
-          # manual Settings -> Pages click. A no-op once the site exists.
+          # Creates the Pages site on the very first run (needs a token with
+          # administration:write; GITHUB_TOKEN cannot, in which case this is a
+          # no-op for a site that already exists).
           enablement: true
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
+          # .nojekyll is a dotfile; without it Pages would run Jekyll over the
+          # output and refuse to publish anything Jekyll considers special.
+          include-hidden-files: true
       - id: pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
