@@ -18,21 +18,32 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "=== 1. current Pages site ==="
-          gh api "repos/${{ github.repository }}/pages" || true
-
-          echo "=== 2. PUT /pages build_type=workflow ==="
-          gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow || true
-
-          echo "=== 3. Pages site after ==="
-          gh api "repos/${{ github.repository }}/pages" || true
-
-          echo "=== 4. POST deployment branch policy: main ==="
-          gh api -X POST "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" \
-            -f name=main -f type=branch || true
-
-          echo "=== 5. branch policies after ==="
-          gh api "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" || true
-
-          echo "=== 6. environment after ==="
-          gh api "repos/${{ github.repository }}/environments/github-pages" || true
+          OUT=/tmp/probe.txt
+          : > "$OUT"
+          {
+            echo "== 1. GET pages =="
+            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
+            echo
+            echo "== 2. PUT build_type=workflow =="
+            gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow 2>&1 || true
+            echo
+            echo "== 3. GET pages after =="
+            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
+            echo
+            echo "== 4. POST env branch policy main =="
+            gh api -X POST "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" \
+              -f name=main -f type=branch 2>&1 || true
+            echo
+            echo "== 5. GET policies =="
+            gh api "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" 2>&1 || true
+            echo
+            echo "== 6. PUT pages source main /site =="
+            gh api -X PUT "repos/${{ github.repository }}/pages" -f source[branch]=main -f source[path]=/site 2>&1 || true
+            echo
+            echo "== 7. GET pages final =="
+            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
+          } >> "$OUT"
+          cat "$OUT"
+          BODY=$(python3 -c "import json,sys;print(json.dumps(open('/tmp/probe.txt').read()))")
+          gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
+            -f body="$BODY" -f path="README.md" -F position=1 2>&1 || true
