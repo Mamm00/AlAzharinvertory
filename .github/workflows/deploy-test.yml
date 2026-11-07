@@ -1,0 +1,26 @@
+name: deploy-test
+# TEMPORARY experiment: can the artifact deploy land on a non-github-pages
+# environment from a branch that is not the legacy Pages source branch?
+on:
+  push:
+    branches: [arena/9e7effe4-alazharinvertory]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: pages-live
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
