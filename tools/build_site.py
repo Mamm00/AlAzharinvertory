@@ -314,6 +314,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          # Create the Pages site on the first run instead of requiring a
+          # manual Settings -> Pages click. A no-op once the site exists.
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
