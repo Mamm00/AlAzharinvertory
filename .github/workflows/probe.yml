@@ -9,6 +9,7 @@ permissions:
   pages: write
   id-token: write
   actions: write
+  issues: write
 
 jobs:
   probe:
@@ -44,6 +45,7 @@ jobs:
             gh api "repos/${{ github.repository }}/pages" 2>&1 || true
           } >> "$OUT"
           cat "$OUT"
-          BODY=$(python3 -c "import json,sys;print(json.dumps(open('/tmp/probe.txt').read()))")
-          gh api -X POST "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
-            -f body="$BODY" -f path="README.md" -F position=1 2>&1 || true
+          echo "---- posting to issue ----"
+          gh api -X POST "repos/${{ github.repository }}/issues" \
+            -f title="CI probe ${{ github.sha }}" \
+            -f body="$(cat "$OUT")" 2>&1 || echo "issue create failed"
