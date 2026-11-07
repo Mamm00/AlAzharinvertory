@@ -459,11 +459,11 @@
       </div>
       <div class="step">
         <h3 data-i18n="s2.h">Turn Pages on</h3>
-        <p data-i18n="s2.p">Settings → Pages → “Deploy from a branch”, branch main, folder /site.</p>
+        <p data-i18n="s2.p">Settings → Pages → Build and deployment → Source: GitHub Actions. “Deploy from a branch” cannot serve site/ — its folder menu only offers / and /docs.</p>
       </div>
       <div class="step">
-        <h3 data-i18n="s3.h">Or let Actions do it</h3>
-        <p data-i18n="s3.p">The included workflow publishes site/ on every push — and fails if site/ is not what the sources build.</p>
+        <h3 data-i18n="s3.h">Allow the branch</h3>
+        <p data-i18n="s3.p">Settings → Environments → github-pages → Deployment branches → add main. Without it the deploy is refused before the job starts.</p>
       </div>
       <div class="step">
         <h3 data-i18n="s4.h">Open it</h3>
@@ -479,8 +479,8 @@ git commit -m "Al Azhar Tex · fabric roll inventory + Pages site"
 git remote add origin https://github.com/OWNER/REPO.git
 git push -u origin main
 
-<span class="c"># 3 · Pages: Settings → Pages → Branch: main, folder: /site</span>
-<span class="c">#     (or keep the workflow below and skip the folder choice)</span>
+<span class="c"># 3 · Pages: Settings → Pages → Source: GitHub Actions</span>
+<span class="c">#     and Settings → Environments → github-pages → allow branch main</span>
 
 <span class="c"># 4 · rebuild the site from its sources before every release</span>
 python3 tools/build_site.py
@@ -638,8 +638,8 @@ python3 tools/build_site.py --check   <span class="c"># CI: fails if site/ is st
       'dep.h': 'Deploy it on GitHub Pages in four commands',
       'dep.p': 'The site lives in site/ and is already static: commit it, point Pages at it, done. Nothing to install, nothing to build on the server.',
       's1.h': 'Push the repository', 's1.p': 'From the project root, send site/ to a new GitHub repository.',
-      's2.h': 'Turn Pages on', 's2.p': 'Settings → Pages → “Deploy from a branch”, branch main, folder /site.',
-      's3.h': 'Or let Actions do it', 's3.p': 'The included workflow publishes site/ on every push — and fails if site/ is not what the sources build.',
+      's2.h': 'Turn Pages on', 's2.p': 'Settings → Pages → Build and deployment → Source: GitHub Actions. “Deploy from a branch” cannot serve site/ — its folder menu only offers / and /docs.',
+      's3.h': 'Allow the branch', 's3.p': 'Settings → Environments → github-pages → Deployment branches → add main. Without it the deploy is refused before the job starts.',
       's4.h': 'Open it', 's4.p': 'The landing page is at the root; the app is at ./app/index.html. Both also work from file://.',
       's.copy': 'Copy', 's.copied': 'Commands copied', 's.copyfail': 'Select and copy manually',
       'dep.nojekyll.h': 'Why .nojekyll is in the tree',
@@ -717,8 +717,8 @@ python3 tools/build_site.py --check   <span class="c"># CI: fails if site/ is st
       'dep.h': 'انشره على GitHub Pages بأربعة أوامر',
       'dep.p': 'الموقع في مجلد site/ وهو ثابت بالفعل: ارفعه، ثم وجّه Pages إليه، وانتهى الأمر. لا تنصيب ولا بناء على الخادم.',
       's1.h': 'ارفع المستودع', 's1.p': 'من جذر المشروع، ارفع مجلد site/ إلى مستودع جديد على GitHub.',
-      's2.h': 'فعّل Pages', 's2.p': 'الإعدادات ← Pages ← النشر من فرع، الفرع main والمجلد ‎/site.',
-      's3.h': 'أو دَع Actions تقوم بذلك', 's3.p': 'سير العمل المرفق ينشر site/ مع كل رفع — ويفشل إن كان site/ لا يطابق مصادره.',
+      's2.h': 'فعّل Pages', 's2.p': 'الإعدادات ← Pages ← البناء والنشر ← المصدر: GitHub Actions. خيار «النشر من فرع» لا يستطيع تقديم مجلد site/، فقائمته تعرض ‎/ و‎/docs فقط.',
+      's3.h': 'اسمح بالفرع', 's3.p': 'الإعدادات ← Environments ← github-pages ← فروع النشر ← أضف main، وبدون ذلك يُرفض النشر قبل أن يبدأ.',
       's4.h': 'افتحه', 's4.p': 'الصفحة الرئيسية في الجذر، والنظام في ./app/index.html. وكلاهما يعمل من ملف:// أيضًا.',
       's.copy': 'نسخ', 's.copied': 'تم نسخ الأوامر', 's.copyfail': 'انسخ الأوامر يدويًا',
       'dep.nojekyll.h': 'لماذا يوجد ملف .nojekyll',
