@@ -1,0 +1,65 @@
+# Publishes site/ to GitHub Pages and refuses to ship a stale site.
+# Pages settings: Source = GitHub Actions. Then site/ is whatever these two
+# --check commands say the sources build, so nobody hand-edits the output.
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Pillow (brand rasteriser only; the app needs nothing)
+        run: python -m pip install --quiet pillow
+      - name: Install jsdom (the test harnesses only; the app needs nothing)
+        run: npm ci --no-audit --no-fund
+      - name: app/ must equal what src/ builds
+        run: |
+          python3 tools/build_app.py --check || {
+            echo "::error::app/ is stale — run: python3 tools/build_app.py"; exit 1; }
+      - name: site/ must equal what the sources build
+        run: |
+          python3 tools/build_site.py --check || {
+            echo "::error::site/ is stale — run: python3 tools/build_site.py"; exit 1; }
+      - name: The four suites — logic, UI, site, hygiene
+        run: |
+          node test.js
+          node test-ui.js
+          node test-site.js
+          node lint.js
+  deploy:
+    needs: verify
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        with:
+          # Create the Pages site on first run instead of requiring a manual
+          # Settings -> Pages click. No-op once the site exists.
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: pages
+        uses: actions/deploy-pages@v4

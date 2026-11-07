@@ -1,0 +1,20 @@
+# dev tooling only — nothing here is part of the shipped app or the site
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+npm-debug.log*
+
+# scratch: renders and measurement dumps written by tools/*.py
+/tmp/
+overlay*.png
+render-*.png
+
+# tool caches that live in the workspace, never in the repo
+.npm/
+.cache/
+.pytest_cache/
+
+# release artefacts built by tools/zip_release.py — never committed
+*.zip
+*.zip.sha256
