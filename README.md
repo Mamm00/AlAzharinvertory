@@ -33,12 +33,11 @@ also the in-app **Guide** screen, translated.
 
 ## Deploy it
 
-Two ways; both publish `site/` (a landing page + the app under `/app`).
+**A · GitHub Actions (recommended, and what this repository is configured for)**
+— every push to `main` republishes `site/`, and the pipeline *fails* if the
+committed output does not match what the sources build.
 
-**A · GitHub Actions (recommended)** — pushes to `main` publish `site/`, and the
-pipeline *fails* if the committed output does not match what the sources build.
-
-1. Create a repo, then:
+1. Create a repo and push:
 
    ```bash
    git remote add origin git@github.com:Mamm00/AlAzharinvertory.git
@@ -46,10 +45,31 @@ pipeline *fails* if the committed output does not match what the sources build.
    ```
 
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
-3. Push. The URL is `https://mamm00.github.io/AlAzharinvertory/`.
+   Not "Deploy from a branch" — see the trap below.
 
-**B · Deploy from a branch** — **Settings → Pages → Source: Deploy from a branch →
-`main` → `/site`**. No Actions, no workflow run. `site/` is committed, so it works.
+3. **Settings → Environments → `github-pages` → Deployment branches and tags →
+   add `main`** (or choose *All branches*). GitHub creates this environment the
+   first time Pages runs and protects it with whichever branch was selected at
+   the time; if that is not `main`, every deploy is refused *before the job
+   starts*.
+
+4. Push. The URL is `https://mamm00.github.io/AlAzharinvertory/`.
+
+The deploy job spends one step proving both settings before it uploads
+anything, so a misconfigured repository fails with the exact click that fixes it
+instead of a red X that says nothing:
+
+| Message | Cause | Fix |
+|---|---|---|
+| `Branch "main" is not allowed to deploy to github-pages due to environment protection rules` | Step 3 missing: the environment only allows the branch that was current when Pages was first enabled | add `main` under *Settings → Environments → github-pages* |
+| `Invalid deployment branch and no branch protection rules set in the environment` | a deploy job running from a branch the Pages site does not publish | same |
+| `Pages serves 'legacy' from branch …/` | Step 2 missing: the site is in **Deploy from a branch** mode, which serves that branch **instead of** the artifact | switch *Pages → Source* to **GitHub Actions** |
+
+**B · Deploy from a branch** — no Actions. The Pages dropdown only offers two
+folders, `/ (root)` and `/docs`, so this mode cannot point at `site/`; pick `/`
+on `main` and the app is still reachable at `/app/`, but the landing page needs
+a root `index.html` (the output in `site/` is written for the site root). Mode A
+is one dropdown away and needs no juggling, which is why it is the default here.
 
 **C · Skip Pages** — `app/index.html` is the product. Mail it, drop it on a shared
 drive, open it from `file://`. Everyone gets the same app; each browser keeps its
