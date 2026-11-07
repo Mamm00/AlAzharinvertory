@@ -18,12 +18,13 @@ jobs:
       - name: Can the workflow token dispatch the pages workflow on the allowed ref?
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           OUT=/tmp/probe.txt
           : > "$OUT"
           {
             echo "== dispatch pages.yml on arena/d9362531-alazharinvertory =="
-            gh workflow run pages.yml --ref arena/d9362531-alazharinvertory 2>&1 || true
+            gh workflow run pages.yml --ref arena/d9362531-alazharinvertory -R "${{ github.repository }}" 2>&1 || true
             echo "exit=$?"
             sleep 10
             echo "== recent runs =="
