@@ -15,37 +15,21 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: What can the workflow token change?
+      - name: Can the workflow token dispatch the pages workflow on the allowed ref?
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           OUT=/tmp/probe.txt
           : > "$OUT"
           {
-            echo "== 1. GET pages =="
-            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
-            echo
-            echo "== 2. PUT build_type=workflow =="
-            gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow 2>&1 || true
-            echo
-            echo "== 3. GET pages after =="
-            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
-            echo
-            echo "== 4. POST env branch policy main =="
-            gh api -X POST "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" \
-              -f name=main -f type=branch 2>&1 || true
-            echo
-            echo "== 5. GET policies =="
-            gh api "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" 2>&1 || true
-            echo
-            echo "== 6. PUT pages source main /site =="
-            gh api -X PUT "repos/${{ github.repository }}/pages" -f source[branch]=main -f source[path]=/site 2>&1 || true
-            echo
-            echo "== 7. GET pages final =="
-            gh api "repos/${{ github.repository }}/pages" 2>&1 || true
+            echo "== dispatch pages.yml on arena/d9362531-alazharinvertory =="
+            gh workflow run pages.yml --ref arena/d9362531-alazharinvertory 2>&1 || true
+            echo "exit=$?"
+            sleep 10
+            echo "== recent runs =="
+            gh run list --limit 5 2>&1 || true
           } >> "$OUT"
           cat "$OUT"
-          echo "---- posting to issue ----"
           gh api -X POST "repos/${{ github.repository }}/issues" \
-            -f title="CI probe ${{ github.sha }}" \
+            -f title="CI probe dispatch ${{ github.sha }}" \
             -f body="$(cat "$OUT")" 2>&1 || echo "issue create failed"
