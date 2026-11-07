@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+  404.html — GitHub Pages fallback for hash routes.
+
+  WHY THIS FILE EXISTS
+  The app is a single-page app that uses hash routing (#/inventory, #/dashboard)
+  and never reloads the server. That is fine, but if a visitor bookmarks
+  https://<user>.github.io/<repo>/#/reports and hard-reloads, or types a wrong
+  path, Pages returns its 404. GitHub serves 404.html for ANY unknown path in
+  the site, so this page catches it and bounces the visitor back to index.html
+  with the original hash intact — meaning "reload on any view still lands on the
+  app" holds true for every route.
+
+  The empty `.nojekyll` file next to this one is what stops Pages from running
+  Jekyll, which would otherwise try to process files (and could hide files whose
+  names begin with an underscore).
+
+  NOTE: this page carries its own CSP meta tag; 'unsafe-inline' is needed here
+  because the redirect script is inline by design (single-file, zero-CDN repo).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<title>Al Azhar Tex — Fabric Roll Inventory</title>
+<base href="./">
+<style>
+  html,body{height:100%;margin:0}
+  body{display:grid;place-items:center;background:#0F2A44;color:#e8f0f8;
+       font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Noto Kufi Arabic",Tahoma,sans-serif;padding:24px}
+  .card{background:#fff;color:#334155;border-radius:16px;padding:26px 28px;max-width:460px;
+        box-shadow:0 30px 70px rgba(3,14,25,.45)}
+  h1{margin:0 0 8px;font-size:19px;color:#0F2A44}
+  p{margin:0 0 14px;font-size:13.5px}
+  a{color:#0f8377;font-weight:650}
+  code{background:#eef1f5;border-radius:5px;padding:1px 5px;font-size:12px}
+  .bar{height:4px;background:#e6ebf1;border-radius:4px;overflow:hidden}
+  .bar i{display:block;height:100%;width:40%;background:#14B8A6;animation:go 1.2s linear infinite}
+  @keyframes go{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px"><svg width="72" height="72" viewBox="-6 -6 132 132" role="img" aria-label="Al Azhar Tex"><path d="M60.92,112.89 L59.07,112.89 L57.21,112.83 L55.36,112.70 L53.52,112.50 L51.68,112.24 L49.85,111.92 L48.04,111.53 L46.24,111.08 L44.45,110.56 L42.69,109.99 L40.95,109.35 L39.23,108.65 L37.53,107.89 L35.87,107.07 L34.23,106.20 L32.63,105.27 L31.05,104.28 L29.52,103.24 L28.02,102.14 L26.56,100.99 L25.15,99.79 L23.77,98.55 L22.44,97.25 L21.16,95.91 L19.92,94.53 L18.74,93.10 L17.60,91.63 L16.52,90.13 L15.49,88.58 L14.51,87.00 L13.59,85.39 L12.73,83.75 L11.93,82.07 L11.18,80.37 L10.50,78.65 L9.87,76.90 L9.31,75.13 L8.81,73.35 L8.37,71.54 L8.00,69.72 L7.69,67.89 L7.45,66.05 L7.27,64.21 L7.15,62.35 L7.10,60.50 L7.12,58.64 L7.20,56.79 L7.34,54.94 L7.55,53.10 L7.83,51.26 L8.17,49.43 L8.57,47.62 L9.03,45.83 L9.56,44.05 L10.15,42.29 L10.81,40.55 L11.52,38.84 L12.29,37.15 L13.12,35.49 L14.01,33.86 L14.95,32.26 L15.96,30.70 L17.01,29.17 L18.12,27.68 L19.28,26.24 L20.49,24.83 L21.74,23.46 L23.05,22.14 L24.40,20.87 L25.79,19.65 L27.23,18.47 L28.71,17.35 L30.22,16.28 L31.78,15.26 L33.36,14.30 L34.98,13.39 L36.63,12.54 L38.31,11.75 L40.02,11.02 L41.75,10.35 L43.50,9.74 L45.27,9.19 L47.07,8.71 L48.87,8.28 L50.69,7.93 L52.53,7.63 L54.37,7.40 L56.22,7.24 L58.07,7.14 L59.92,7.10 L61.78,7.13 L63.63,7.22 L65.48,7.38 L67.32,7.61 L69.16,7.90 L70.98,8.25 L72.79,8.67 L74.58,9.15" fill="none" stroke="#222457" stroke-width="6.2" stroke-linecap="butt"/><circle cx="47.6" cy="45.9" r="12.1" fill="none" stroke="#222457" stroke-width="10.8"/><rect x="44" y="53.3" width="38.6" height="10.3" fill="#222457"/><rect x="70.7" y="28.2" width="11.9" height="56" fill="#222457"/><path d="M62.39,68.20 L62.29,68.69 L62.17,69.17 L62.03,69.64 L61.88,70.12 L61.71,70.58 L61.52,71.04 L61.32,71.50 L61.10,71.94 L60.86,72.38 L60.61,72.81 L60.35,73.23 L60.07,73.64 L59.78,74.04 L59.47,74.43 L59.15,74.81 L58.82,75.18 L58.47,75.54 L58.11,75.88 L57.74,76.21 L57.36,76.53 L56.97,76.83 L56.57,77.13 L56.15,77.40 L55.73,77.66 L55.30,77.91 L54.86,78.14 L54.41,78.36 L53.96,78.55 L53.50,78.74 L53.03,78.91 L52.56,79.06 L52.08,79.19 L51.60,79.31 L51.11,79.41 L50.62,79.49 L50.13,79.56 L49.63,79.60 L49.14,79.64 L48.64,79.65 L48.14,79.65 L47.65,79.62 L47.15,79.59 L46.66,79.53 L46.17,79.46 L45.68,79.37 L45.20,79.26 L44.71,79.13 L44.24,78.99 L43.77,78.84 L43.30,78.66 L42.84,78.47 L42.39,78.26 L41.95,78.04 L41.51,77.80 L41.08,77.55 L40.67,77.28 L40.26,77.00 L39.86,76.71 L39.47,76.40 L39.09,76.07 L38.73,75.74 L38.38,75.39 L38.04,75.02 L37.71,74.65 L37.39,74.27 L37.09,73.87 L36.81,73.47 L36.53,73.05 L36.28,72.63 L36.03,72.19 L35.81,71.75 L35.59,71.30 L35.40,70.85 L35.22,70.38 L35.06,69.91 L34.91,69.44 L34.78,68.96 L34.67,68.48 L34.57,67.99 L34.49,67.50 L34.43,67.01 L34.39,66.51 L34.36,66.02 L34.35,65.52 L34.36,65.02 L34.38,64.53 L34.43,64.03 L34.49,63.54 L34.56,63.05 L34.66,62.56 L34.77,62.08" fill="none" stroke="#CB3632" stroke-width="10.3" stroke-linecap="butt"/><g fill="#CB3632"><path d="M7.50,0.00 L2.55,1.85 L2.32,7.13 L-0.97,3.00 L-6.07,4.41 L-3.15,0.00 L-6.07,-4.41 L-0.97,-3.00 L2.32,-7.13 L2.55,-1.85Z" transform="translate(83.28,12.05) rotate(295.0)"/><path d="M6.90,0.00 L2.34,1.70 L2.13,6.56 L-0.90,2.76 L-5.58,4.06 L-2.90,0.00 L-5.58,-4.06 L-0.90,-2.76 L2.13,-6.56 L2.34,-1.70Z" transform="translate(97.52,20.47) rotate(295.0)"/><path d="M6.40,0.00 L2.17,1.58 L1.98,6.09 L-0.83,2.56 L-5.18,3.76 L-2.69,0.00 L-5.18,-3.76 L-0.83,-2.56 L1.98,-6.09 L2.17,-1.58Z" transform="translate(107.62,33.49) rotate(295.0)"/><path d="M5.80,0.00 L1.97,1.43 L1.79,5.52 L-0.75,2.32 L-4.69,3.41 L-2.44,0.00 L-4.69,-3.41 L-0.75,-2.32 L1.79,-5.52 L1.97,-1.43Z" transform="translate(114.98,47.41) rotate(295.0)"/><path d="M5.50,0.00 L1.87,1.36 L1.70,5.23 L-0.71,2.20 L-4.45,3.23 L-2.31,0.00 L-4.45,-3.23 L-0.71,-2.20 L1.70,-5.23 L1.87,-1.36Z" transform="translate(116.05,62.25) rotate(295.0)"/></g><text x="66.79" y="119.61" transform="rotate(-6.50 66.79 119.61)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">A</text><text x="72.68" y="118.64" transform="rotate(-12.20 72.68 118.64)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">L</text><text x="84.02" y="114.98" transform="rotate(-23.60 84.02 114.98)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">A</text><text x="90.18" y="111.86" transform="rotate(-30.20 90.18 111.86)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">Z</text><text x="96.53" y="107.60" transform="rotate(-37.50 96.53 107.60)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">H</text><text x="102.80" y="102.05" transform="rotate(-45.50 102.80 102.05)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">A</text><text x="107.73" y="96.36" transform="rotate(-52.70 107.73 96.36)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">R</text><text x="113.84" y="86.49" transform="rotate(-63.80 113.84 86.49)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">T</text><text x="116.42" y="80.42" transform="rotate(-70.10 116.42 80.42)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">E</text><text x="118.29" y="74.21" transform="rotate(-76.30 118.29 74.21)" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9.6" font-weight="700" fill="#222457">X</text><text x="63.7" y="96.5" text-anchor="middle" transform="rotate(0 63.7 96.5)" font-family="Helvetica,Arial,sans-serif" font-size="7.4" font-style="italic" font-weight="700" letter-spacing="-1.6" fill="#222457">FINE FABRICS</text></svg>
+      <div style="text-align:start">
+        <div style="font-weight:800;font-size:15px;letter-spacing:.3px;color:#222457">Al Azhar Tex</div>
+        <div style="font-size:11.5px;color:#5a6a7d">Fabric Roll Inventory</div>
+      </div>
+    </div>
+    <h1>Opening the app…</h1>
+    <p>This repository is a single-page application: every view lives at a hash
+       route (for example <code>#/reports</code>). That URL was typed or
+       reloaded directly, so GitHub returned this fallback page and is sending
+       you back to <code>index.html</code> with your route preserved.</p>
+    <div class="bar"><i></i></div>
+    <p style="margin-top:14px">
+      If you are not moved automatically,
+      <a id="manualLink" href="./index.html">open Fabric Roll Inventory here</a>.
+    </p>
+  </div>
+<script>
+(function () {
+  /* Work out where index.html actually is:
+     - project pages:  https://<user>.github.io/<repo>/anything   → /<repo>/index.html
+     - user pages:     https://<user>.github.io/anything           → /index.html
+     - local / file:// : stay in the same folder                     → ./index.html
+     The hash (the app's route) is copied across so the view survives. */
+  try {
+    var path = location.pathname || '/';
+    var segs = path.split('/').filter(function (s) { return s.length > 0; });
+    var isPages = /github\.io$/i.test(location.hostname.replace(/^[^:]+/, '')) || /\.github\.io/i.test(location.host);
+    var target;
+    if (isPages && segs.length >= 2) {
+      target = '/' + segs[0] + '/index.html';          /* project page → repo root */
+    } else if (isPages) {
+      target = '/index.html';                          /* user page → site root    */
+    } else {
+      target = 'index.html';                           /* any other host → relative */
+    }
+    var hash = location.hash && /^#\//.test(location.hash) ? location.hash : '';
+    var url = target + (location.search || '') + hash;
+    document.getElementById('manualLink').setAttribute('href', url);
+    setTimeout(function () { try { location.replace(url); } catch (e) { location.href = url; } }, 250);
+  } catch (e) { /* leave the manual link visible */ }
+})();
+</script>
+<noscript>
+  <p style="font-size:13px">JavaScript is disabled, so the automatic redirect cannot run.
+  Open <a href="./index.html">index.html</a> directly.</p>
+</noscript>
+</body>
+</html>

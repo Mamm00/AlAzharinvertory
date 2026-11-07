@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+  404.html — GitHub Pages fallback for hash routes.
+
+  WHY THIS FILE EXISTS
+  The app is a single-page app that uses hash routing (#/inventory, #/dashboard)
+  and never reloads the server. That is fine, but if a visitor bookmarks
+  https://<user>.github.io/<repo>/#/reports and hard-reloads, or types a wrong
+  path, Pages returns its 404. GitHub serves 404.html for ANY unknown path in
+  the site, so this page catches it and bounces the visitor back to index.html
+  with the original hash intact — meaning "reload on any view still lands on the
+  app" holds true for every route.
+
+  The empty `.nojekyll` file next to this one is what stops Pages from running
+  Jekyll, which would otherwise try to process files (and could hide files whose
+  names begin with an underscore).
+
+  NOTE: this page carries its own CSP meta tag; 'unsafe-inline' is needed here
+  because the redirect script is inline by design (single-file, zero-CDN repo).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<title>Al Azhar Tex — Fabric Roll Inventory</title>
+<base href="./">
+<style>
+  html,body{height:100%;margin:0}
+  body{display:grid;place-items:center;background:#0F2A44;color:#e8f0f8;
+       font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans","Noto Kufi Arabic",Tahoma,sans-serif;padding:24px}
+  .card{background:#fff;color:#334155;border-radius:16px;padding:26px 28px;max-width:460px;
+        box-shadow:0 30px 70px rgba(3,14,25,.45)}
+  h1{margin:0 0 8px;font-size:19px;color:#0F2A44}
+  p{margin:0 0 14px;font-size:13.5px}
+  a{color:#0f8377;font-weight:650}
+  code{background:#eef1f5;border-radius:5px;padding:1px 5px;font-size:12px}
+  .bar{height:4px;background:#e6ebf1;border-radius:4px;overflow:hidden}
+  .bar i{display:block;height:100%;width:40%;background:#14B8A6;animation:go 1.2s linear infinite}
+  @keyframes go{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px"><!--@MARK-->
+      <div style="text-align:start">
+        <div style="font-weight:800;font-size:15px;letter-spacing:.3px;color:#222457">Al Azhar Tex</div>
+        <div style="font-size:11.5px;color:#5a6a7d">Fabric Roll Inventory</div>
+      </div>
+    </div>
+    <h1>Opening the app…</h1>
+    <p>This repository is a single-page application: every view lives at a hash
+       route (for example <code>#/reports</code>). That URL was typed or
+       reloaded directly, so GitHub returned this fallback page and is sending
+       you back to <code>index.html</code> with your route preserved.</p>
+    <div class="bar"><i></i></div>
+    <p style="margin-top:14px">
+      If you are not moved automatically,
+      <a id="manualLink" href="./index.html">open Fabric Roll Inventory here</a>.
+    </p>
+  </div>
+<script>
+(function () {
+  /* Work out where index.html actually is:
+     - project pages:  https://<user>.github.io/<repo>/anything   → /<repo>/index.html
+     - user pages:     https://<user>.github.io/anything           → /index.html
+     - local / file:// : stay in the same folder                     → ./index.html
+     The hash (the app's route) is copied across so the view survives. */
+  try {
+    var path = location.pathname || '/';
+    var segs = path.split('/').filter(function (s) { return s.length > 0; });
+    var isPages = /github\.io$/i.test(location.hostname.replace(/^[^:]+/, '')) || /\.github\.io/i.test(location.host);
+    var target;
+    if (isPages && segs.length >= 2) {
+      target = '/' + segs[0] + '/index.html';          /* project page → repo root */
+    } else if (isPages) {
+      target = '/index.html';                          /* user page → site root    */
+    } else {
+      target = 'index.html';                           /* any other host → relative */
+    }
+    var hash = location.hash && /^#\//.test(location.hash) ? location.hash : '';
+    var url = target + (location.search || '') + hash;
+    document.getElementById('manualLink').setAttribute('href', url);
+    setTimeout(function () { try { location.replace(url); } catch (e) { location.href = url; } }, 250);
+  } catch (e) { /* leave the manual link visible */ }
+})();
+</script>
+<noscript>
+  <p style="font-size:13px">JavaScript is disabled, so the automatic redirect cannot run.
+  Open <a href="./index.html">index.html</a> directly.</p>
+</noscript>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "al-azhar-tex-inventory",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Bilingual multi-warehouse fabric-roll stock app in one HTML file, plus the GitHub Pages site that ships it.",
+  "scripts": {
+    "build": "python3 tools/build_app.py && python3 tools/build_site.py",
+    "test": "node test.js && node test-ui.js && node test-site.js && node lint.js"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
